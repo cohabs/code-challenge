@@ -1,0 +1,13 @@
+{
+  "name": "code-challenge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/cohabs/code-challenge.git",
+  "author": "bruno <bruno@cohabs.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@stripe/stripe-js": "^2.2.2",
+    "fs": "^0.0.1-security",
+    "stripe": "^14.9.0"
+  }
+}

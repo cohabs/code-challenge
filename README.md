@@ -4,7 +4,7 @@ Welcome in our Code challenge, the goal of this exercices if to have an idea abo
 
 # Getting Started:
 
-1) Fork the into your workspace.
+1) Fork the repository into your workspace.
 
 2) Clone it your local machine.
 

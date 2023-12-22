@@ -1,15 +1,27 @@
-const fs = require('fs')
-const Stripe = require('stripe');
-const STRIPE_TEST_SECRET_KEY = 'sk_test_51MEuPXA69JWLHl3Jxw3gKWTtXJCOkzmvjDs5oJ45DZEHFzo5HLz5JfWkNvzU03eCyo0ojkiW2ot6WXA8udWEkh0300nAnoJmcj'
+const fs = require("fs");
+const Stripe = require("stripe");
+const STRIPE_TEST_SECRET_KEY =
+  "sk_test_51MEuPXA69JWLHl3Jxw3gKWTtXJCOkzmvjDs5oJ45DZEHFzo5HLz5JfWkNvzU03eCyo0ojkiW2ot6WXA8udWEkh0300nAnoJmcj";
 const stripe = Stripe(STRIPE_TEST_SECRET_KEY);
 
-const handler = async (country) => {
+const openJsonFile = async (path) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, "utf8", (err, data) => {
+      if (err) reject(err);
+      resolve(JSON.parse(data));
+    });
+  });
+};
 
-  try{
-    let finalCustomers = []
+const handler = async (country) => {
+  try {
+    let finalCustomers = [];
+
+    const customers = await openJsonFile("./customers.json");
+    const countries = await openJsonFile("./countries-ISO3166.json");
 
     /* add code below this line */
-    
+
     // filter the customers by country
     // transform customers to save into Stripe
     // for each customer create a Stripe customer
@@ -32,10 +44,19 @@ const handler = async (country) => {
 
     /* add code above this line */
 
-    console.log(finalCustomers)
+    console.log(finalCustomers);
+  } catch (e) {
+    throw e;
+  }
+};
 
-}catch(e){
-  throw e
-}
- 
-} 
+(async () => {
+  const argv = process.argv.slice(2);
+  const argc = argv.length;
+  if (argc < 1) {
+    console.warn("Usage: node index.js <country>");
+    return;
+  }
+  const country = argv[0];
+  await handler(country);
+})();

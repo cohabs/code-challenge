@@ -21,8 +21,10 @@ const handler = async (country) => {
 
     let customers = await openJsonFile("./customers.json");
     customers = CustomerUtils.sortByCountry(customers, country);
-
+    
     const countries = await openJsonFile("./countries-ISO3166.json");
+    
+    customers = CustomerUtils.addCountryCode(customers, countries);
 
 
 

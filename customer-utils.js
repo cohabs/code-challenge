@@ -22,7 +22,7 @@ const createStripeCustomers = async (customers, stripeInstance) => {
         const stripeCustomer = await stripeInstance.customers.create({
             email: customer.email,
             name: `${customer.first_name} ${customer.last_name}`,
-            country: {
+            address: {
                 country: customer.country_code,
             },
         });

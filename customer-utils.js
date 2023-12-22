@@ -21,13 +21,15 @@ const createStripeCustomers = async (customers, stripeInstance) => {
     for (const customer of customers) {
         const stripeCustomer = await stripeInstance.customers.create({
             email: customer.email,
-            full_name: `${customer.first_name} ${customer.last_name}`,
-            country: customer.country_code,
+            name: `${customer.first_name} ${customer.last_name}`,
+            country: {
+                country: customer.country_code,
+            },
         });
         stripeCustomers.push({
             email: customer.email,
             customerId: stripeCustomer.id,
-            country: customer.country,
+            country: customer.country_code,
         });
     }
     return stripeCustomers;

@@ -21,38 +21,16 @@ const handler = async (country) => {
 
     let customers = await openJsonFile("./customers.json");
     customers = CustomerUtils.sortByCountry(customers, country);
-    
+
     const countries = await openJsonFile("./countries-ISO3166.json");
-    
     customers = CustomerUtils.addCountryCode(customers, countries);
 
+    finalCustomers = await CustomerUtils.createStripeCustomers(
+      customers,
+      stripe
+    );
 
-
-    /* add code below this line */
-
-    // filter the customers by country
-    // transform customers to save into Stripe
-    // for each customer create a Stripe customer
-    // push into finalCustomers the stripe customers with email, country and id as properties.
-    // write finalCustomers array into final-customers.json using fs
-    /* 
-      finalCustomers array should look like:
-      finalCustomers = [{
-          email: test@test.com
-          customerId: 1d833d-12390sa-9asd0a2-asdas,
-          country: 'ES'
-        },
-        {
-          email: test@test.com
-          customerId: 1d833d-12390sa-9asd0a2-asdas,
-          country: 'ES'
-        }
-      }] 
-    */
-
-    /* add code above this line */
-
-    console.log(finalCustomers);
+    console.table(finalCustomers);
   } catch (e) {
     throw e;
   }

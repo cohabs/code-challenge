@@ -16,7 +16,25 @@ const addCountryCode = (customers, countries) => {
     });
 }
 
+const createStripeCustomers = async (customers, stripeInstance) => {
+    const stripeCustomers = [];
+    for (const customer of customers) {
+        const stripeCustomer = await stripeInstance.customers.create({
+            email: customer.email,
+            full_name: `${customer.first_name} ${customer.last_name}`,
+            country: customer.country_code,
+        });
+        stripeCustomers.push({
+            email: customer.email,
+            customerId: stripeCustomer.id,
+            country: customer.country,
+        });
+    }
+    return stripeCustomers;
+}
+
 module.exports = {
     sortByCountry,
-    addCountryCode
-}
+    addCountryCode,
+    createStripeCustomers,
+};

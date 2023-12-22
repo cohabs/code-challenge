@@ -15,6 +15,15 @@ const openJsonFile = async (path) => {
   });
 };
 
+const saveJsonToFile = async (path, data) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(path, JSON.stringify(data), (err) => {
+      if (err) reject(err);
+      resolve();
+    });
+  });
+};
+
 const handler = async (country) => {
   try {
     let finalCustomers = [];
@@ -31,6 +40,7 @@ const handler = async (country) => {
     );
 
     console.table(finalCustomers);
+    await saveJsonToFile("./final-customers.json", finalCustomers);
   } catch (e) {
     throw e;
   }

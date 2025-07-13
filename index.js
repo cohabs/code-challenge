@@ -1,6 +1,7 @@
 const fs = require('fs')
 const Stripe = require('stripe');
 
+// Import utility functions from dedicated modules for better organization and reusability.
 // Import file utility functions
 const { readJsonFile, writeJsonFile } = require('./utils/fileUtils');
 
@@ -8,6 +9,9 @@ const { readJsonFile, writeJsonFile } = require('./utils/fileUtils');
 const { filterCustomersByCountry, getCountryCode, formatStripeCustomer, createStripeCustomer} = require('./utils/customerUtils');
 
 const STRIPE_TEST_SECRET_KEY = 'sk_test_51MEuPXA69JWLHl3Jxw3gKWTtXJCOkzmvjDs5oJ45DZEHFzo5HLz5JfWkNvzU03eCyo0ojkiW2ot6WXA8udWEkh0300nAnoJmcj'
+
+// Define file paths as constants
+// This centralizes configuration, making it easy to change paths if the file structure evolves,
 const CUSTOMERS_FILE_PATH = './customers.json';
 const FINAL_CUSTOMERS_FILE_PATH = './final-customers.json';
 const COUNTRIES_ISO_FILE_PATH = './countries-ISO3166.json';
@@ -22,12 +26,14 @@ const handler = async (country) => {
     /* add code below this line */
 
     // Load all customers and country mapping
+    // use await for avoiding race conditions and undefined data
     const allCustomers = await readJsonFile(CUSTOMERS_FILE_PATH);
     const countriesISO = await readJsonFile(COUNTRIES_ISO_FILE_PATH);
 
     // filter the customers by country
     const customersToProcess = filterCustomersByCountry(allCustomers, country);
 
+    // early exit if no customers match the filter to avoid unnecessary processing and API calls, improving efficiency.
     if (customersToProcess.length === 0) {
       console.log(`No customers found for country: ${country}`);
       // Always write the result in final-customers.json, even if empty for this country
@@ -39,6 +45,7 @@ const handler = async (country) => {
     // Get the two-letter country code for the target country
     const targetCountryCode = getCountryCode(country, countriesISO);
 
+    // Handle case where the provided country name cannot be mapped to an ISO code
     if (!targetCountryCode) {
         console.error(`Could not find code for country: ${country} in the json.`);
         // Write an empty array 

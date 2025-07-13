@@ -1,6 +1,6 @@
 // Filters a list of customers by a specific country
 function filterCustomersByCountry(customers, targetCountryName) {
-    // Perform a case-insensitive comparison for country names
+    // Perform a case-insensitive comparison for country names to make the filter robust against variations in casing
     return customers.filter(customer =>
         customer.country && customer.country.toLowerCase() === targetCountryName.toLowerCase()
     );
@@ -33,9 +33,11 @@ function formatStripeCustomer(customer, countryCode) {
 async function createStripeCustomer(stripe, customerData) {
     try {
         const stripeCustomer = await stripe.customers.create(customerData);
+        // feedback during execution, helping to track progress
         console.log(`Successfully created Stripe customer: ${stripeCustomer.email} (ID: ${stripeCustomer.id})`);
         return stripeCustomer;
     } catch (error) {
+        // Catching the error prevents the entire script from crashing and allows error handling 
         console.error(`Error creating Stripe customer for ${customerData.email}:`, error.message);
         throw new Error(`Failed to create Stripe customer: ${error.message}`);
     }
